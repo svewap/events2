@@ -15,6 +15,7 @@ use JWeiland\Events2\Service\DatabaseService;
 use JWeiland\Events2\Service\DayRelationService;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
@@ -98,7 +99,7 @@ class ReGenerateDays extends AbstractTask implements ProgressProviderInterface
                         $e->getMessage(),
                         $e->getFile(),
                         $e->getLine()
-                    ), FlashMessage::ERROR);
+                    ), AbstractMessage::ERROR);
                     return false;
                 }
 
@@ -167,7 +168,7 @@ class ReGenerateDays extends AbstractTask implements ProgressProviderInterface
      * @param int $severity Message level (according to \TYPO3\CMS\Core\Messaging\FlashMessage class constants)
      * @throws \Exception
      */
-    public function addMessage(string $message, int $severity = FlashMessage::OK): void
+    public function addMessage(string $message, int $severity = AbstractMessage::OK): void
     {
         $flashMessage = GeneralUtility::makeInstance(FlashMessage::class, $message, '', $severity);
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
