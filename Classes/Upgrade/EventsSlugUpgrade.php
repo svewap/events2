@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Events2\Upgrade;
 
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Result;
 use JWeiland\Events2\Configuration\ExtConf;
 use JWeiland\Events2\Helper\PathSegmentHelper;
 use TYPO3\CMS\Core\Database\Connection;
@@ -76,8 +76,8 @@ class EventsSlugUpgrade implements UpgradeWizardInterface
         $queryBuilder = $this->getQueryBuilder();
         $amountOfRecordsWithEmptySlug = $queryBuilder
             ->count('*')
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         return (bool)$amountOfRecordsWithEmptySlug;
     }
@@ -96,7 +96,7 @@ class EventsSlugUpgrade implements UpgradeWizardInterface
         $queryBuilder = $this->getQueryBuilder();
         $statement = $queryBuilder
             ->select('uid', 'pid', $this->titleColumn)
-            ->execute();
+            ->executeQuery();
 
         $connection = $this->getConnectionPool()->getConnectionForTable($this->tableName);
         while ($recordToUpdate = $statement->fetch(\PDO::FETCH_ASSOC)) {
@@ -142,7 +142,7 @@ class EventsSlugUpgrade implements UpgradeWizardInterface
         $newSlug = '';
         $statement = $this->getUniqueSlugStatement($uid, $slug);
         $counter = $this->slugCache[$slug] ?? 1;
-        while ($statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($statement->fetchAssociative()) {
             $newSlug = $slug . '-' . $counter;
             $statement->bindValue(1, $newSlug);
             $statement->execute();
@@ -157,7 +157,7 @@ class EventsSlugUpgrade implements UpgradeWizardInterface
         return $newSlug ?? $slug;
     }
 
-    protected function getUniqueSlugStatement(int $uid, string $slug): Statement
+    protected function getUniqueSlugStatement(int $uid, string $slug): Result
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($this->tableName);
         $queryBuilder->getRestrictions()->removeAll();
@@ -169,14 +169,14 @@ class EventsSlugUpgrade implements UpgradeWizardInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     $this->slugColumn,
-                    $queryBuilder->createPositionalParameter($slug, Connection::PARAM_STR)
+                    $queryBuilder->createPositionalParameter($slug)
                 ),
                 $queryBuilder->expr()->neq(
                     'uid',
                     $queryBuilder->createPositionalParameter($uid, Connection::PARAM_INT)
                 )
             )
-            ->execute();
+            ->executeQuery();
     }
 
     /**

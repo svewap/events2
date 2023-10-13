@@ -65,8 +65,8 @@ class MigrateDetailInformationsUpgrade implements UpgradeWizardInterface
                     $queryBuilder->quoteIdentifier('e.detail_information')
                 )
             )
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         return $amountOfMigratedRecords === 0;
     }

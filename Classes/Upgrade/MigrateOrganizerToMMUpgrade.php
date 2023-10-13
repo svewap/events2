@@ -66,8 +66,8 @@ class MigrateOrganizerToMMUpgrade implements UpgradeWizardInterface
                     $queryBuilder->quoteIdentifier('eo_mm.uid_local')
                 )
             )
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         return $amountOfMigratedRecords === 0;
     }
