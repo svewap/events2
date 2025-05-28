@@ -23,6 +23,8 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:events2/Resources/Private/Language/locallang_db.xlf:plugin.list.description',
 );
 
+ExtensionManagementUtility::addToAllTCAtypes('tt_content', 'pages', 'events2_list', 'after:header');
+
 ExtensionUtility::registerPlugin(
     'Events2',
     'Show',
