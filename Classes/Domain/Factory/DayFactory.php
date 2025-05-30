@@ -29,7 +29,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 class DayFactory
 {
     private const PROCESS_METHODS = [
-        'findExactDay',
+        //'findExactDay',
         'findNextDay',
         'findPreviousDay',
         'buildDay',
