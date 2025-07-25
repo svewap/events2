@@ -30,8 +30,8 @@ class DayFactory
 {
     private const PROCESS_METHODS = [
         //'findExactDay',
-        'findNextDay',
-        'findPreviousDay',
+        //'findNextDay',
+        //'findPreviousDay',
         'buildDay',
     ];
 
