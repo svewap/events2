@@ -68,6 +68,9 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:events2/Resources/Private/Language/locallang_db.xlf:plugin.searchResults.description',
 );
 
+ExtensionManagementUtility::addToAllTCAtypes('tt_content', 'pages', 'events2_list,events2_show,events2_management,events2_calendar,events2_searchform,events2_searchresults', 'after:header');
+
+
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
     '--div--;Configuration,pi_flexform',
